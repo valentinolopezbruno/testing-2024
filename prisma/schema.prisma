@@ -1,0 +1,87 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://u370566736_vvalnezin:43604681vaLEN@@srv1182.hstgr.io:3306/u370566736_TuttoBene_Test"
+}
+
+model categoria {
+  id     Int    @id @default(autoincrement())
+  nombre String @db.VarChar(255)
+}
+
+model detallePedido {
+  id             Int @id @default(autoincrement())
+  idPedido       Int
+  idProducto     Int
+  cantidad       Int
+  precioUnitario Int
+  total          Int
+}
+
+model formaPago {
+  id     Int    @id @default(autoincrement())
+  nombre String @db.VarChar(255)
+}
+
+model pedido {
+  id            Int    @id @default(autoincrement())
+  cliente       String @db.VarChar(255)
+  total         Int
+  estado        Int
+  telefono      Int
+  pagado        Int
+  direccion     String @db.VarChar(255)
+  idTipoEntrega Int
+  idFormaPago   Int
+
+}
+
+model producto {
+  id               Int    @id @default(autoincrement())
+  nombre           String @db.VarChar(255)
+  precio           Int
+  formatoVenta     String @db.VarChar(255)
+  descripcion      String @db.VarChar(255)
+  imagen           String @db.VarChar(255)
+  public_id  String @db.VarChar(255)
+  promocion        Int
+  precio_promocion Int
+  disponibilidad   Int
+  idCategoria      Int
+  estado Int
+  variantes     variante[]
+}
+
+model tipoEntrega {
+  id     Int    @id @default(autoincrement())
+  nombre String @db.VarChar(255)
+}
+
+model usuario {
+  id     Int    @id @default(autoincrement())
+  nombre String @db.VarChar(255)
+  token  String @db.VarChar(255)
+}
+
+model variacion {
+  id             Int    @id @default(autoincrement())
+  nombre         String @db.VarChar(255)
+  precioAgregado Int
+  disponibilidad Int
+  idVariante     Int
+  variante       variante @relation(fields: [idVariante], references: [id])
+
+}
+
+model variante {
+  id         Int    @id @default(autoincrement())
+  nombre     String @db.VarChar(255)
+  idProducto Int
+  producto   producto @relation(fields: [idProducto], references: [id])
+  variaciones variacion[]
+
+}
