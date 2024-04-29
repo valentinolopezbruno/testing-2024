@@ -201,3 +201,48 @@ exports.cambioDisponibilidad = async (req, res) => {
     res.status(500).json({ error: 'Ocurrió un error al editar el producto' });
   }
 };
+
+exports.eliminarProducto = async (req, res) => {
+  // en realidad no lo elimino, sino quye cambio el estado a 1 y esta desabilitado
+  const datosProducto = req.body; // Obtener los datos actualizados del producto desde el cuerpo de la solicitud
+  console.log(datosProducto)
+  try {
+    // Actualizar el producto con los datos proporcionados
+    const productoActualizado = await prisma.producto.update({
+      where: {
+        id: datosProducto.id // Utilizar el ID del producto proporcionado en la solicitud
+      },
+      data: {
+        disponibilidad: 1,
+        estado: 1
+      }
+    });
+
+    res.json(productoActualizado)
+  } catch (error) {
+    console.error('Error al editar el producto:', error);
+    res.status(500).json({ error: 'Ocurrió un error al editar el producto' });
+  }
+};
+
+exports.cambioEstadoDisponible = async (req, res) => {
+  // en realidad no lo elimino, sino quye cambio el estado a 1 y esta desabilitado
+  const datosProducto = req.body; // Obtener los datos actualizados del producto desde el cuerpo de la solicitud
+  console.log(datosProducto)
+  try {
+    // Actualizar el producto con los datos proporcionados
+    const productoActualizado = await prisma.producto.update({
+      where: {
+        id: datosProducto.id // Utilizar el ID del producto proporcionado en la solicitud
+      },
+      data: {
+        estado: 0
+      }
+    });
+
+    res.json(productoActualizado)
+  } catch (error) {
+    console.error('Error al editar el producto:', error);
+    res.status(500).json({ error: 'Ocurrió un error al editar el producto' });
+  }
+};

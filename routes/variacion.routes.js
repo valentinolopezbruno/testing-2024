@@ -6,6 +6,6 @@ const router = express.Router();
 
 // Defino las rutas de acceso a cada metodo / funcion
 router.post("/api/variacion/editar", variacionController.editarVariacion);
-router.post("/api/variacion/eliminar", variacionController.eliminarVariacion);
+router.post("/api/variacion/borrar", variacionController.eliminarVariacion);
 
 module.exports = router;

@@ -6,6 +6,6 @@ const router = express.Router();
 
 // Defino las rutas de acceso a cada metodo / funcion
 router.post("/api/variante/editar", varianteController.editarVariante);
-router.post("/api/variante/eliminar", varianteController.eliminarVariante);
+router.post("/api/variante/borrar", varianteController.eliminarVariante);
 
 module.exports = router;

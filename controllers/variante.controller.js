@@ -16,14 +16,26 @@ exports.editarVariante = async (req, res) => {
   }
 };
 
-// Función para eliminar una variante
+// Función para eliminar una variante y sus variaciones
 exports.eliminarVariante = async (req, res) => {
-  const { id } = req.body; // ID de la variante a eliminar
+  const idVariante = parseInt(req.body.id); // Asegúrate de obtener correctamente el ID de la variante
 
   try {
-    await prisma.variante.delete({ where: { id: parseInt(id) } });
-    res.json({ message: 'Variante eliminada correctamente.' });
+    // Primero elimina todas las variaciones asociadas
+    await prisma.variacion.deleteMany({
+      where: {
+        idVariante: idVariante
+      }
+    });
+
+    // Luego elimina la variante
+    await prisma.variante.delete({
+      where: { id: idVariante }
+    });
+
+    res.json({ message: 'Variante y todas sus variaciones eliminadas correctamente.' });
   } catch (error) {
+    console.error('Error al eliminar la variante:', error);
     res.status(500).json({ error: 'No se pudo eliminar la variante.' });
   }
 };
