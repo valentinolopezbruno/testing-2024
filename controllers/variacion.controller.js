@@ -1,6 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+exports.getVariaciones = async (req, res) => {
+  const variaciones = await prisma.variacion.findMany({});
+  res.json(variaciones);
+};
+
 // Función para editar una variante
 exports.editarVariacion = async (req, res) => {
   const { id, nuevaVariacion } = req.body; // ID y nuevo nombre de la variante

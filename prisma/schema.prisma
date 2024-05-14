@@ -11,6 +11,7 @@ datasource db {
 model categoria {
   id     Int    @id @default(autoincrement())
   nombre String @db.VarChar(255)
+  productos producto[]
 }
 
 model detallePedido {
@@ -20,6 +21,10 @@ model detallePedido {
   cantidad       Int
   precioUnitario Int
   total          Int
+  idVariacion String @db.VarChar(255)
+  pedido      pedido @relation(fields: [idPedido], references: [id])
+  productoRel producto @relation(fields: [idProducto], references: [id])
+
 }
 
 model formaPago {
@@ -35,9 +40,12 @@ model pedido {
   telefono      Int
   pagado        Int
   direccion     String @db.VarChar(255)
-  idTipoEntrega Int
-  idFormaPago   Int
-
+  tipoEntrega Int
+  formaPago   Int
+  fecha String @db.VarChar(255)
+  localidad String @db.VarChar(255)
+  totalProductos Int
+  detalles     detallePedido[]
 }
 
 model producto {
@@ -54,6 +62,8 @@ model producto {
   idCategoria      Int
   estado Int
   variantes     variante[]
+  categoria      categoria @relation(fields: [idCategoria], references: [id])
+  detallePedido detallePedido[]
 }
 
 model tipoEntrega {

@@ -7,6 +7,7 @@ const router = express.Router();
 // Defino las rutas de acceso a cada metodo / funcion
 router.get("/api/categoria", categoriaController.getCategoria);
 router.post("/api/categoria", categoriaController.crearCategoria);
+router.post("/api/categoria/borrar", categoriaController.eliminarCategoria);
 router.post("/api/categoria/editar", categoriaController.editarCategoria);
 
 

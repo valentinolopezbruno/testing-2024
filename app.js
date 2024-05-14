@@ -27,6 +27,10 @@ app.use(fileUpload({
     tempFileDir : './uploads'
   }));
 
+
+// PEDIDO
+const pedidoRoutes = require('./routes/pedido.routes');
+app.use('/', pedidoRoutes); 
 //  VARIACION
 const variacionRoutes = require('./routes/variacion.routes');
 app.use('/', variacionRoutes); 

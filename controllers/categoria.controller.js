@@ -2,44 +2,23 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 exports.getCategoria = async (req, res) => {
-  const productos = await prisma.categoria.findMany({ });
-  res.json(productos);
+  const categorias = await prisma.categoria.findMany({
+    include: {
+        productos: true,
+      }
+   });
+  res.json(categorias);
 };
 
 exports.crearCategoria = async (req, res) => {
-    const { nuevoProducto} = req.body;
-  
+    const  {nombre} = req.body;
+
     try {
       // Crear el producto en la base de datos
-      const productoCreado = await prisma.producto.create({
-        data: {
-          ...nuevoProducto,
-          variantes: {
-            create: variantes.map(variante => ({
-              nombre: variante.nombre,
-              variaciones: {
-                create: variante.variaciones.map(variacion => ({
-                  nombre: variacion.nombre,
-                  precioAgregado: variacion.precioAgregado,
-                  disponibilidad: variacion.disponibilidad
-                }))
-              }
-            }))
-          }
-        },
-        include: {
-          variantes: {
-            include: {
-              variaciones: true
-            }
-          }
-        }
+      const categoria = await prisma.categoria.create({
+        data: {nombre:nombre},
       });
-  
-      res.status(201).json({ 
-        mensaje: 'Producto, variantes y variaciones creados satisfactoriamente',
-        producto: productoCreado
-      });
+      res.json(categoria)
     } catch (error) {
       console.error('Error al crear el producto, variantes y variaciones:', error);
       res.status(500).json({ error: 'Ocurrió un error al crear el producto, variantes y variaciones' });
@@ -47,30 +26,35 @@ exports.crearCategoria = async (req, res) => {
 };
 
 exports.editarCategoria = async (req, res) => {
-    const { datosProducto } = req.body; // Obtener los datos actualizados del producto desde el cuerpo de la solicitud
+    const { id, nombre } = req.body; 
   
     try {
-      // Actualizar el producto con los datos proporcionados
-      const productoActualizado = await prisma.producto.update({
+      const categoria = await prisma.categoria.update({
         where: {
-          id: datosProducto.idProducto // Utilizar el ID del producto proporcionado en la solicitud
+          id: id 
         },
         data: {
-          nombre: datosProducto.nombre,
-          precio: datosProducto.precio,
-          formatoVenta: datosProducto.formatoVenta,
-          descripcion: datosProducto.descripcion,
-          imagen: datosProducto.imagen,
-          promocion: datosProducto.promocion,
-          precio_promocion: datosProducto.precio_promocion,
-          disponibilidad: datosProducto.disponibilidad,
-          idCategoria: datosProducto.idCategoria
+          nombre: nombre
         }
       });
-  
-      res.status(200).json({ mensaje: 'Producto actualizado correctamente', producto: productoActualizado });
+      res.json(categoria)
     } catch (error) {
-      console.error('Error al editar el producto:', error);
-      res.status(500).json({ error: 'Ocurrió un error al editar el producto' });
+      console.error('Error al editar la categoria:', error);
+      res.status(500).json({ error: 'Ocurrió un error al editar la categoria' });
+    }
+};
+
+exports.eliminarCategoria = async (req, res) => {
+    const  {id} = req.body;
+
+    try {
+      // Crear el producto en la base de datos
+      const categoria = await prisma.categoria.delete({
+        where:{id:id},
+      });
+      res.json(categoria)
+    } catch (error) {
+      console.error('Error al crear el producto, variantes y variaciones:', error);
+      res.status(500).json({ error: 'Ocurrió un error al crear el producto, variantes y variaciones' });
     }
 };
