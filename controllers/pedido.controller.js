@@ -37,7 +37,6 @@ exports.crearPedido = async (req, res) => {
         const nuevoPedido = await prisma.pedido.create({
             data: {
                 cliente: Pedido.cliente,
-                total: calcularTotal(Pedido),
                 totalProductos: calcularTotalProductos(Pedido),
                 fecha: calcularFecha(),
                 localidad: Pedido.localidad,
