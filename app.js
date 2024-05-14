@@ -27,7 +27,9 @@ app.use(fileUpload({
     tempFileDir : './uploads'
   }));
 
-
+// HORARIO
+const horarioRoutes = require('./routes/horario.routes');
+app.use('/', horarioRoutes); 
 // PEDIDO
 const pedidoRoutes = require('./routes/pedido.routes');
 app.use('/', pedidoRoutes); 
