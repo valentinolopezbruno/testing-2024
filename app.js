@@ -3,22 +3,30 @@ const cors = require('cors'); // Importa el middleware cors
 const fileUpload = require("express-fileupload")
 const http = require('http'); // Importa el módulo HTTP nativo
 const socketIo = require('socket.io'); // Importa socket.io
+const allowedOrigins = ["http://localhost:4200", "https://admintuttobene.web.app"];
 
 const app = express();
 const server = http.createServer(app); // Crea un servidor HTTP usando Express
-const io = socketIo(server, {
+const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:4200",  // Ajusta esto según tus necesidades
+    origin: (origin, callback) => {
+      // Comprobar si el origen está en la lista de orígenes permitidos
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("No autorizado por CORS"));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true
   }
 });
+
 // Exportar io para usarlo en los controladores
 module.exports = io ;
 
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:4200'];
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
