@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const io  = require("../app")
 
 exports.getPedidos = async (req, res) => {
   const pedidos = await prisma.pedido.findMany({
@@ -10,7 +11,7 @@ exports.getPedidos = async (req, res) => {
               productoRel: true,
               productoRel:{
                 include: {
-                    variantes: true,
+                    variantes: true, 
                     variantes: {
                       include: {
                         variaciones: true
@@ -77,7 +78,7 @@ exports.crearPedido = async (req, res) => {
                 }
             }
         });
-
+        io.emit('nuevo-pedido', nuevoPedido);
         res.json(nuevoPedido);
     } catch (error) {
         console.error('Error al crear el pedido:', error);
@@ -95,6 +96,27 @@ exports.cambioEstado = async (req, res) => {
         },
         data: {
           estado: parseInt(estado)
+        }
+      });
+  
+      res.json(Pedido)
+    } catch (error) {
+      console.error('Error al editar el Pedido:', error);
+      res.status(500).json({ error: 'Ocurrió un error al editar el Pedido' });
+    }
+  };
+
+  exports.cambioPagado = async (req, res) => {
+    const {id, pagado} = req.body; // Obtener los datos actualizados del producto desde el cuerpo de la solicitud
+    try {
+      // Actualizar el producto con los datos proporcionados
+      const Pedido = await prisma.pedido.update({
+        
+        where: {
+          id: parseInt(id) // Utilizar el ID del producto proporcionado en la solicitud
+        },
+        data: {
+          pagado: parseInt(pagado)
         }
       });
   

@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/api/pedido", pedidoController.getPedidos);
 router.post("/api/pedido", pedidoController.crearPedido);
 router.post("/api/pedido/cambiarEstado", pedidoController.cambioEstado);
+router.post("/api/pedido/cambiarPagado", pedidoController.cambioPagado);
 
 
 module.exports = router;
