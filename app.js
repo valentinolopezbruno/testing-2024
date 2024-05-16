@@ -33,7 +33,7 @@ app.use(fileUpload({
 
 const io = socketIo(server, {
   cors: {
-    origin: configureCors,
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
