@@ -45,6 +45,7 @@ exports.crearPedido = async (req, res) => {
                 pagado: parseInt(Pedido.pagado), 
                 formaPago: parseInt(Pedido.formaPago),
                 tipoEntrega: Pedido.tipoEntrega,
+                tipoPedido: Pedido.tipoPedido,
                 estado: 0, // Pendiente
                 telefono: parseInt(Pedido.telefono),
                 detalles: {

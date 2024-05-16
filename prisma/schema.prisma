@@ -48,6 +48,7 @@ model pedido {
   pagado        Int
   direccion     String @db.VarChar(255)
   tipoEntrega Int
+  tipoPedido Int
   formaPago   Int
   fecha String @db.VarChar(255)
   localidad String @db.VarChar(255)
