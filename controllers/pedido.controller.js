@@ -161,7 +161,8 @@ exports.cambioEstado = async (req, res) => {
           estado: parseInt(estado)
         }
       });
-  
+      console.log("cambio estado")
+      io.emit('cambioEstado', Pedido);
       res.json(Pedido)
     } catch (error) {
       console.error('Error al editar el Pedido:', error);
@@ -169,7 +170,7 @@ exports.cambioEstado = async (req, res) => {
     }
   };
 
-  exports.cambioPagado = async (req, res) => {
+exports.cambioPagado = async (req, res) => {
     const {id, pagado} = req.body; // Obtener los datos actualizados del producto desde el cuerpo de la solicitud
     try {
       // Actualizar el producto con los datos proporcionados
