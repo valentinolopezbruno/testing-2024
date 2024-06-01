@@ -43,6 +43,8 @@ const io = socketIo(server, {
 module.exports = io;
 
 // Importar y usar rutas
+const cajaRoutes = require('./routes/caja.routes');
+app.use('/', cajaRoutes);
 const detallePedidoRoutes = require('./routes/detallePedido.routes');
 app.use('/', detallePedidoRoutes);
 const horarioRoutes = require('./routes/horario.routes');
