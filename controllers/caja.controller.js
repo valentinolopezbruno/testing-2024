@@ -132,11 +132,10 @@ exports.ventaDia = async (req, res) => {
 
   exports.sumarPedidosOnline = async (req, res) => {
     try {
-      // Ejecuta la consulta y extrae directamente el valor sumado
+      // Ejecuta la consulta y extrae directamente el conteo de pedidos
       const resultado = await prisma.$queryRaw`
-        SELECT SUM(DP.total) AS totalTipo1
-        FROM detallePedido AS DP
-        JOIN pedido AS PE ON DP.idPedido = PE.id
+        SELECT COUNT(*) AS totalTipo1
+        FROM pedido AS PE
         WHERE PE.estado = 1 
           AND PE.tipoPedido = 1
           AND DATE(STR_TO_DATE(PE.fecha, '%m/%d/%Y')) = CURDATE();
@@ -151,14 +150,14 @@ exports.ventaDia = async (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     }
   };
+  
 
   exports.sumarPedidosLocal = async (req, res) => {
     try {
-      // Ejecuta la consulta y extrae directamente el valor sumado
+      // Ejecuta la consulta y extrae directamente el conteo de pedidos
       const resultado = await prisma.$queryRaw`
-        SELECT SUM(DP.total) AS totalTipo0
-        FROM detallePedido AS DP
-        JOIN pedido AS PE ON DP.idPedido = PE.id
+        SELECT COUNT(*) AS totalTipo0
+        FROM pedido AS PE
         WHERE PE.estado = 1 
           AND PE.tipoPedido = 0
           AND DATE(STR_TO_DATE(PE.fecha, '%m/%d/%Y')) = CURDATE();
@@ -173,4 +172,47 @@ exports.ventaDia = async (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     }
   };
+  
+  exports.sumarPedidosRetiroLocal = async (req, res) => {
+    try {
+      // Ejecuta la consulta y extrae directamente el conteo de pedidos
+      const resultado = await prisma.$queryRaw`
+        SELECT COUNT(*) AS totalTipo0
+        FROM pedido AS PE
+        WHERE PE.estado = 1 
+          AND PE.tipoEntrega = 0
+          AND DATE(STR_TO_DATE(PE.fecha, '%m/%d/%Y')) = CURDATE();
+      `;
+      
+      // Dado que $queryRaw podría devolver un arreglo de objetos, extrae el valor de totalTipo0 del primer objeto
+      const totalTipo0 = resultado[0]?.totalTipo0 ? Number(resultado[0].totalTipo0) : 0;
+  
+      res.json(totalTipo0 );
+    } catch (error) {
+      console.error('Error al ejecutar la consulta:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  };
+
+  exports.sumarPedidosEnvioDomicilio = async (req, res) => {
+    try {
+      // Ejecuta la consulta y extrae directamente el conteo de pedidos
+      const resultado = await prisma.$queryRaw`
+        SELECT COUNT(*) AS totalTipo0
+        FROM pedido AS PE
+        WHERE PE.estado = 1 
+          AND PE.tipoEntrega = 1
+          AND DATE(STR_TO_DATE(PE.fecha, '%m/%d/%Y')) = CURDATE();
+      `;
+      
+      // Dado que $queryRaw podría devolver un arreglo de objetos, extrae el valor de totalTipo0 del primer objeto
+      const totalTipo0 = resultado[0]?.totalTipo0 ? Number(resultado[0].totalTipo0) : 0;
+  
+      res.json(totalTipo0 );
+    } catch (error) {
+      console.error('Error al ejecutar la consulta:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  };
+  
   

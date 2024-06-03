@@ -14,4 +14,7 @@ router.get("/api/pedidosAnio", cajaController.pedidosAnio);
 router.get("/api/online", cajaController.sumarPedidosOnline);
 router.get("/api/local", cajaController.sumarPedidosLocal);
 
+router.get("/api/enviadosDomicilio", cajaController.sumarPedidosEnvioDomicilio);
+router.get("/api/retiradosLocal", cajaController.sumarPedidosRetiroLocal);
+
 module.exports = router;
