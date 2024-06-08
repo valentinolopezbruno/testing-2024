@@ -6,6 +6,10 @@ const router = express.Router();
 
 // Defino las rutas de acceso a cada metodo / funcion
 router.get("/api/producto", productoController.getProductos);
+router.get("/api/productosDisponibles", productoController.getProductosDisponibles);
+
+
+
 router.post("/api/producto", productoController.crearProducto);
 router.post("/api/producto/borrar", productoController.eliminarProducto);
 router.post("/api/producto/cambiarEstadoDisponible", productoController.cambioEstadoDisponible);

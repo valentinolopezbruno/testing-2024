@@ -17,6 +17,22 @@ exports.getProductos = async (req, res) => {
   res.json(productos);
 };
 
+exports.getProductosDisponibles = async (req, res) => {
+  const productos = await prisma.producto.findMany({
+    where: {
+      disponibilidad: 0
+    },
+    include: {
+      variantes: {
+        include: {
+          variaciones: true
+        }
+      }
+    }
+  });
+  res.json(productos);
+};
+
 exports.crearProducto = async (req, res) => {
   const nuevoProducto = JSON.parse(req.body.nuevoProducto);
    const variantes = JSON.parse(req.body.variantes);
