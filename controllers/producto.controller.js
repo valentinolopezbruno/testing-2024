@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const subirImagen = require("../cloudinary");
+const imageService = require("../cloudinary");
 const fs = require("fs-extra")
 
 exports.getProductos = async (req, res) => {
@@ -35,7 +35,7 @@ exports.getProductosDisponibles = async (req, res) => {
 
 exports.crearProducto = async (req, res) => {
   const nuevoProducto = JSON.parse(req.body.nuevoProducto);
-   const variantes = JSON.parse(req.body.variantes);
+  const variantes = JSON.parse(req.body.variantes);
   console.log("Nuevo Producto:", nuevoProducto);
   console.log("Variantes:", variantes);
 
@@ -44,10 +44,10 @@ exports.crearProducto = async (req, res) => {
     let public_id = "No Image";
     let secure_url = "No Image";
     if (req.files && req.files.imagen) {
-      const result = await subirImagen.subirImagen(req.files.imagen.tempFilePath);
+      const result = await imageService.subirImagen(req.files.imagen.tempFilePath);
       public_id = result.public_id;
       secure_url = result.secure_url;
-      fs.unlink(req.files.imagen.tempFilePath); // Eliminar el archivo temporal
+      fs.unlinkSync(req.files.imagen.tempFilePath); // Eliminar el archivo temporal
     }
 
     // Crear el producto en la base de datos
@@ -55,15 +55,15 @@ exports.crearProducto = async (req, res) => {
       data: {
         nombre: nuevoProducto.nombre,
         precio: nuevoProducto.precio,
-        descripcion:nuevoProducto.descripcion,
-        imagen:secure_url,
-        public_id:public_id,
+        descripcion: nuevoProducto.descripcion,
+        imagen: secure_url,
+        public_id: public_id,
         formatoVenta: nuevoProducto.formatoVenta,
-        disponibilidad:0,
+        disponibilidad: 0,
         idCategoria: nuevoProducto.idCategoria,
         promocion: nuevoProducto.promocion,
         precio_promocion: nuevoProducto.precio_promocion,
-        estado:0,
+        estado: 0,
         variantes: {
           create: variantes.map(variante => ({
             nombre: variante.nombre,
@@ -103,11 +103,11 @@ exports.editarProducto = async (req, res) => {
 
     // Gestión de nueva imagen
     if (req.files?.imagen) {
-      const result = await subirImagen.subirImagen(req.files.imagen.tempFilePath);
+      const result = await imageService.subirImagen(req.files.imagen.tempFilePath);
       imagenUrl = result.secure_url;
       publicId = result.public_id;
       if (nuevoProducto.public_id) {
-        await subirImagen.eliminarImagen(nuevoProducto.public_id);
+        await imageService.eliminarImagen(nuevoProducto.public_id);
       }
       fs.unlinkSync(req.files.imagen.tempFilePath);
     }
@@ -135,7 +135,7 @@ exports.editarProducto = async (req, res) => {
       if (variante.id) {
         const updatedVariante = await prisma.variante.update({
           where: { id: variante.id },
-          data: { nombre: variante.nombre, },
+          data: { nombre: variante.nombre },
         });
         console.log('Variante actualizada:', updatedVariante);
 
@@ -178,11 +178,10 @@ exports.editarProducto = async (req, res) => {
       }
     }
 
-    // ahora le hago un get al proudcto y se lo devulevo con la misma estructura que los demas para pushearlo directamente 
+    // ahora le hago un get al producto y se lo devuelvo con la misma estructura que los demás para pushearlo directamente 
     const productoEstructurado = await prisma.producto.findFirst({
-      where:{id:nuevoProducto.id},
+      where: { id: nuevoProducto.id },
       include: {
-        variantes: true,
         variantes: {
           include: {
             variaciones: true
@@ -190,7 +189,7 @@ exports.editarProducto = async (req, res) => {
         }
       }
     });
-    res.json({producto: productoEstructurado});
+    res.json({ producto: productoEstructurado });
   } catch (error) {
     console.error('Error al actualizar el producto:', error);
     res.status(500).send({ error: 'Error al actualizar el producto y sus variantes' });
