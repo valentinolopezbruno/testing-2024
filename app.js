@@ -46,6 +46,8 @@ module.exports = io;
 const cajaRoutes = require('./routes/caja.routes');
 app.use('/', cajaRoutes);
 const detallePedidoRoutes = require('./routes/detallePedido.routes');
+const estado_localRoutes = require('./routes/estado_local.routes');
+app.use('/', estado_localRoutes);
 app.use('/', detallePedidoRoutes);
 const horarioRoutes = require('./routes/horario.routes');
 app.use('/', horarioRoutes);

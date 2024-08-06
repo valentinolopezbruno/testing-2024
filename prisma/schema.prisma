@@ -14,6 +14,11 @@ model categoria {
   productos producto[]
 }
 
+model estado_local {
+  id     Int    @id @default(autoincrement())
+  estado       Int  
+}
+
 model detallePedido {
   id             Int @id @default(autoincrement())
   idPedido       Int
