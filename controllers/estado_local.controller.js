@@ -9,12 +9,12 @@ exports.getEstado = async (req, res) => {
 exports.editarEstadoLocal = async (req, res) => {
     const { id , estado } = req.body; 
     try {
-      const estado_local = await prisma.categoria.update({
+      const estado_local = await prisma.estado_local.update({
         where: {
           id: id 
         },
         data: {
-          estado: estado
+          estado: parseInt(estado)
         }
       });
       res.json(estado_local)
