@@ -8,6 +8,8 @@ const router = express.Router();
 router.get("/api/horario", horarioController.getHorarios);
 router.post("/api/horario", horarioController.crearHorario);
 router.post("/api/horarioBorrar", horarioController.eliminarHorario);
+router.post("/api/horarioActualizar", horarioController.actualizarHorario);
+
 
 
 
