@@ -4,7 +4,7 @@ const fileUpload = require("express-fileupload");
 const http = require('http'); 
 const socketIo = require('socket.io'); 
 
-const allowedOrigins = ["http://localhost:4200","http://localhost:57171", "https://admintuttobene.web.app","https://fronttuttobene.web.app","http://localhost:56940"];
+const allowedOrigins = ["http://localhost:4200","http://localhost:51160", "https://admintuttobene.web.app","https://fronttuttobene.web.app","http://testt.pastastuttobene.com"];
 
 const app = express();
 const server = http.createServer(app);
