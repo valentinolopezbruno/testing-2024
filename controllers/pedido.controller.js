@@ -1,5 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../prisma/client');
+
 const io  = require("../app")
 
 exports.getPedidos = async (req, res) => {

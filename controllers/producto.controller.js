@@ -1,21 +1,26 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../prisma/client');
+
 const imageService = require("../cloudinary");
 const fs = require("fs-extra")
 
 exports.getProductos = async (req, res) => {
-  const productos = await prisma.producto.findMany({
-    include: {
-      variantes: true,
-      variantes: {
-        include: {
-          variaciones: true
+  try {
+    const productos = await prisma.producto.findMany({
+      include: {
+        variantes: {
+          include: {
+            variaciones: true
+          }
         }
       }
-    }
-  });
-  res.json(productos);
+    });
+    res.json(productos);
+  } catch (error) {
+    console.error('Error al obtener los productos:', error);
+    res.status(500).json({ error: 'Error al obtener los productos' });
+  }
 };
+
 
 exports.getProductosDisponibles = async (req, res) => {
   const productos = await prisma.producto.findMany({
